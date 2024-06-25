@@ -46,6 +46,7 @@
                 <th>Nome</th>
                 <th>Iniciativa</th>
                 <th>Rolagem</th>
+                <th>Ação</th>
             </tr>
         </thead>
         <tbody>
@@ -66,11 +67,20 @@
                 row.insertCell(0).innerText = name;
                 row.insertCell(1).innerText = initiative;
                 row.insertCell(2).innerText = '-';
+                
+                const removeButton = document.createElement('button');
+                removeButton.innerText = 'Remover';
+                removeButton.onclick = function() {
+                    row.remove();
+                    checkTableVisibility();
+                    sortTable();
+                };
+                row.insertCell(3).appendChild(removeButton);
 
                 document.getElementById('name').value = '';
                 document.getElementById('initiative').value = '';
 
-                //rollButton.style.display = 'block';
+                rollButton.style.display = 'block';
             }
         }
 
@@ -83,8 +93,20 @@
                 row.cells[2].innerText = initiative + roll;
             });
 
+            sortTable();
+        }
+
+        function sortTable() {
+            const rows = Array.from(tableBody.rows);
+
             rows.sort((a, b) => parseInt(b.cells[2].innerText) - parseInt(a.cells[2].innerText));
             rows.forEach(row => tableBody.appendChild(row));
+        }
+
+        function checkTableVisibility() {
+            if (tableBody.rows.length === 0) {
+                rollButton.style.display = 'none';
+            }
         }
     </script>
 </body>
